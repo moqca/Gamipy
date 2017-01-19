@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<table class="table-condensed">
+    <form action="{{ url_for('game_add') }}" method="post">
+    <thead>
+        <th>Concept</th>
+        <th>Value</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Game Name</td>
+            <td>Game Description</td>
+        </tr>
+        <tr>
+            <td>{{ form.gamename }}</td>
+            <td>{{ form.gamedescription }}</td>
+        </tr>
+        <tr>
+            <td><input type=submit value="Publish"></td>
+        </tr>
+    </tbody>
+    </table>
+</table>
+
+{% endblock %}

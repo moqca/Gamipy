@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<table class="table table-hover table-condensed table-striped">
+    <thead>
+        <th data-sortable="true">Game</th>
+        <th data-sortable="true">Description</th>
+        <th data-sortable="true">Leader</th>
+        <th data-sortable="true">Points</th>
+    </thead>
+<tbody>
+    {% for game in games %}
+        <tr>
+            <td>{{ game.gamename }}</td>
+            <td><a href="{{ url_for('view_game', id=game.gameid) }}">{{ game.gamedescription }}</a></td>
+            <td>Andres</td>
+            <td>1000</td>
+        </tr>
+    {% endfor %}
+</tbody>
+    </table>
+</table>
+
+{% endblock %}

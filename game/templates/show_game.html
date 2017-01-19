@@ -1,0 +1,293 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="jumbotron">
+<h2>{{ game.gamename }}</h2>
+</div>
+<a href="{{ url_for('config_game', id=game.gameid) }}">Configure Game</a></td>
+
+
+<!--CHECK Active leaderboards and check if necessary-->
+<h1>Leaderboard</h1>
+<button class="btn" data-toggle="collapse" data-target="#leaderform">Add Leaderboard</button>
+<div id="leaderform" class="class-sm-6 collapse">
+    <h2>Add leaderboard</h2>
+    <form class="form-horizontal" action="{{ url_for('board_add') }}" method="post">
+       <div class="form-group">
+      <label for="fk_measureboard" class="col-sm-2 control-label">From Metric</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="gamename" id="gamename" type="text" value="{{ game.gameid }}" readonly>
+          </input>
+      </div>
+        </div>
+       <div class="form-group">
+      <label class="col-sm-2 control-label">Board Name</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="boardname" id="boardname" type="text" placeholder="Board Name">
+      </div>
+        </div>
+        <div class="form-group">
+        <label for="fromdb" class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-10">
+         <input class="form-control" name="boarddescription" id="boarddescription" type="text" placeholder="Describe your board">
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">For</label>
+        <div class="col-sm-10">
+          <select id="for" name="for" class="form-control">
+            <option>Players</option>
+            <option>Team</option>
+          </select>
+        </div>
+        </div>
+
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Scope</label>
+        <div class="col-sm-10">
+          <select id="scope" name="scope" class="form-control">
+            <option>Game</option>
+          </select>
+        </div>
+        </div>
+
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">User Scope</label>
+        <div class="col-sm-10">
+          <select id="userscope" name="userscope" class="form-control">
+            <option>Everyone</option>
+            <option>List</option>
+            <option>Line of Business</option>
+          </select>
+        </div>
+        </div>
+
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Selection</label>
+        <div class="col-sm-10">
+          <select id="userselection" name="userselection" class="form-control">
+            <option value="Beauty">Beauty</option>
+            <option value="BoD">BoD</option>
+            <option value=Comp">Comp & Gen</option>
+            <option value="Escalations">Escalations</option>
+            <option value="General">General</option>
+            <option value="Sales">Sales Concierge</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Tech Support">Tech Support</option>
+          </select>
+        </div>
+        </div>
+
+
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Peridiocity</label>
+        <div class="col-sm-10">
+          <select id="peridiocity" name="peridiocity" class="form-control">
+            <option value="Day">Day</option>
+            <option value="Week">Week</option>
+            <option value="Month">Month</option>
+            <option value="Year">Year</option>
+          </select>
+        </div>
+        </div>
+
+    <input type=submit class="btn btn-primary btn-md" value="Board">
+  </form>
+</div>
+
+
+
+<table id="table" data-detail-view="true" class="table table-hover table-condensed">
+    <thead class="thead-inverse">
+        <th data-sortable="true">Board</th>
+        <th data-sortable="true">Description</th>
+        <th data-sortable="true">Played by</th>
+        <th data-sortable="true">Period</th>
+        <th data-sortable="true">Leader</th>
+        <th data-sortable="true">Points</th>
+    </thead>
+<tbody>
+{% for board in game.boards %}
+       <tr>
+            <td>{{ board.boardname }}</td>
+            <td>{{ board.boarddescription }}</td>
+            <td>{{ board.userselection }}</td>
+            <td>{{ board.peridiocity }}</td>
+            <td>{{ board.participating.agent }} </td>
+            <td> 1000 </td>
+                <form action="{{ url_for('board_view', id= board.boardid) }}">
+                <td><input name="delete" type=submit class="btn btn-success btn-md" value="View"></td>
+                </form>
+        </tr>
+    {% endfor %}
+</tbody>
+    </table>
+</table>
+
+
+
+<!--CHECK Active Metrics and add if necessary-->
+<h1>Active Metrics</h1>
+<button class="btn" data-toggle="collapse" data-target="#metricform">Add New Metric</button>
+<div id="metricform" class="class-sm-6 collapse">
+  <h2>Add New Metric</h2>
+  <form class="form-horizontal" action="{{ url_for('metric_add') }}" method="post">
+       <div class="form-group">
+      <label class="col-sm-2 control-label">Metric Name</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="metricname" id="metricname" type="text" placeholder="Choose your Metric">
+      </div>
+        </div>
+       <div class="form-group">
+      <label for="fk_gamename" class="col-sm-2 control-label">gamename</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="fk_gamename" id="fk_gamename" type="text" value="{{ metricform.fk_gamename.data }}" readonly>
+          </input>
+      </div>
+        </div>
+
+        <div class="form-group">
+        <label for="fromdb" class="col-sm-2 control-label">From DB</label>
+        <div class="col-sm-10">
+         <select id="fromdb" class="form-control" name="fromdb">
+            <option>GPQ</option>
+          </select>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Type</label>
+        <div class="col-sm-10">
+          <select id="type" name="type" class="form-control">
+            <option>Points</option>
+          </select>
+        </div>
+        </div>
+    <input type=submit class="btn btn-primary btn-md" value="Metric">
+  </form>
+</div>
+
+
+
+<table id="table" data-detail-view="true" class="table table-hover table-condensed">
+    <thead class="thead-inverse">
+        <th data-sortable="true">Metric</th>
+        <th data-sortable="true">Type</th>
+        <th data-sortable="true">FromDB</th>
+    </thead>
+<tbody>
+{% for metric in game.metrics %}
+       <tr>
+            <td>{{ metric.metricname }}</td>
+            <td>Points</td>
+            <td>{{ metric.fromdb }}</td>
+           <Td>{{ metric.metricid }}</Td>
+            <td> <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#actionModal{{ metric.metricid }}"> Add Action</button></td>
+                <div class="modal fade" id="actionModal{{ metric.metricid }}" role="form">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&timesb;</button>
+                                <h4 class="modal-title">Add Action</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" action="{{ url_for('action_add') }}" method="post">
+
+                                    <div class="form-group">
+                                        <label class="control-label">Action Name</label>
+                                        <div class="col-sm-10">
+                                        <input class="form-control" name="actionname" id="actionname" type="text" placeholder="Action Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">Game</label>
+                                        <div class="col-sm-10">
+                                        <input class="form-control" name="gamename" id="gamename" type="text" value="{{ game.gameid }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Metric</label>
+                                        <div class="col-sm-10">
+                                        <input class="form-control" name="metricname" id="metricname" type="text" value="{{ metric.metricid }}" readonly>
+                                        </div>
+                                    </div>
+
+                                   <div class="form-group">
+                                        <label for="actiondescription" class="control-label">Description</label>
+                                        <div class="col-sm-10">
+                                        <input class="form-control" name="actiondescription" id="actiondescription" type="text">
+                                      </input>
+                                        </div>
+                                   </div>
+
+                                    <div class="form-group">
+                                        <label for="actiondo" class="control-label">Do</label>
+                                        <div class="col-sm-10">
+                                            <select id="actiondo" class="select-picker form-control" name="actiondo">
+                                                <option selected value="Add">Add</option>
+                                                <option value="Substract">Substract</option>
+                                                <option value="Null">Null</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                           <div class="form-group">
+                                              <label for="fk_belongs" class="control-label">Belongs to</label>
+                                              <div class="col-sm-10">
+                                                <input class="form-control" name="fk_belongs" id="fk_belongs" type="text" value="{{ metric.metricid}}" readonly>
+                                                  </input>
+                                              </div>
+                                                </div>
+
+                                    <div class="form-group">
+                                        <label for="amount" class="control-label">Amount</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" name="amount" id="amount" type="number">
+                                        </div>
+                                    </div>
+                                    <input type=submit class="btn btn-primary btn-md" value="Action">
+                              </form>
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </tr>
+        <tr class="info">
+            <td></td>
+            <td><b>Action</b></td>
+            <td><b>What</b></td>
+            <td><b>Amount</b></td>
+            <td><b>Delete</b></td>
+        </tr>
+            {% for action in metric.actions %}
+            <tr>
+                <td></td>
+                <td>{{ action.actionname }}</td>
+                <td>
+                    {% if action.actiondo == 1 %}
+                    Add
+                    {% elif action.actiondo == 2 %}
+                    Substract
+                    {% else %}
+                    Null
+                    {% endif %}
+                </td>
+                <td>{{ action.amount }}</td>
+                <form action="{{ url_for('delete_action', id=action.actionid) }}" method="post">
+                <td><input name="delete" type=submit class="btn btn-primary btn-sm" value="Delete"></td>
+                </form>
+            {% endfor %}
+            </tr>
+    {% endfor %}
+</tbody>
+    </table>
+</table>
+
+
+{% endblock %}

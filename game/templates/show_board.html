@@ -1,0 +1,126 @@
+<link href="/static/percent.css" rel="stylesheet">
+
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<h1>{{ board.boardname }}</h1>
+<h3>{{ board.boarddescription }}</h3>
+
+
+
+<div class="container">
+    <div class="row"><br>
+        <div class="col-xs-2">
+            <h4>Add Agent</h4>
+        </div>
+        <div class="col-xs-5">
+            <form action="{{ url_for('board_add_agent') }}" method="POST">
+                <select id="agent" name="agent" class="form-control">
+                    {% for agent in agents %}
+                    <option value="{{ agent.id }}">{{ agent.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name='board' value="{{ board.boardid }}">
+        </div>
+        <div class="col-xs-2">
+            <input type="submit" name="Add" value="Add" class="btn btn-info btn-sm">
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="containter">
+    <div class="row text-center"><br></div>
+        <div class="col-xs-1">
+            <h3>Rank</h3>
+        </div>
+        <div class="col-xs-2">
+            <h3 class="text-left">Agent</h3>
+        </div>
+
+        <div class="col-xs-1">
+            <h3 class="text-left">Score</h3>
+        </div>
+
+        <div class="col-xs-8">
+            <h3 class="text-center">Goal</h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    {% for  agent in participating %}
+    <div class="row"><br>
+        <div class = "col-xs-1">
+            <p>{{ loop.index0 + 1 }}</p>
+        </div>
+        <div class ="col-xs-2">
+            <p>{{ agent.Agent.name }}</p>
+        </div>
+        <div class="col-xs-1">
+            <p>{{ agent.BoardParticipant.points }}</p>
+        </div>
+	    <div class="col-xs-8">
+    	    <div class="progress">
+                <div class="bar-step" style="left: 67%">
+                    <div class="label-txt"></div>
+                    <div class="label-percent">80</div>
+                    <div class="label-line"></div>
+
+                </div>
+                <div class="bar-step" style="left: 71%">
+                    <div class="label-txt"></div>
+                    <div class="label-percent">85</div>
+                    <div class="label-line"></div>
+
+                </div>
+                <div class="bar-step" style="left: 79%">
+                    <div class="label-txt"></div>
+                    <div class="label-percent">95</div>
+                    <div class="label-line"></div>
+
+                </div>
+                <div class="bar-step" style="left: 83.33%">
+                    <div class="label-txt"></div>
+                    <div class="label-percent">100</div>
+                    <div class="label-line"></div>
+
+                </div>
+                {% if agent.BoardParticipant.points < 80 %}
+                <div class="progress-bar progress-bar-danger" style="width: {{ agent.BoardParticipant.points * 0.8333 }}%;"> {{ agent.BoardParticipant.points }} </div>
+                {% elif agent.BoardParticipant.points < 85 %}
+                <div class="progress-bar progress-bar-warning" style="width: {{ agent.BoardParticipant.points * 0.8333 }}%;"> {{ agent.BoardParticipant.points }} </div>
+                {% elif agent.BoardParticipant.points < 95 %}
+                <div class="progress-bar progress-bar-info" style="width: {{ agent.BoardParticipant.points * 0.8333 }}%;"> {{ agent.BoardParticipant.points }} </div>
+                {% elif agent.BoardParticipant.points < 100 %}
+                <div class="progress-bar progress-bar-primary" style="width: {{ agent.BoardParticipant.points * 0.8333 }}%;"> {{ agent.BoardParticipant.points }} </div>
+                {% else %}
+                <div class="progress-bar progress-bar-success" style="width: {{ agent.BoardParticipant.points * 0.8333 }}%;"> {{ agent.BoardParticipant.points }} </div>
+                {% endif %}
+
+		       </div>
+	        </div>
+    </div>
+    <div class="row">
+        <form action="{{ url_for('board_update_value') }}" method="POST">
+            <input type="hidden" name='board' value="{{ board.boardid }}">
+            <input type="hidden" name='agent' value="{{ agent.Agent.id }}">
+
+            {% for data in game[0].metrics %}
+                <input type="submit" name="metric" value="{{ data.metricname }}" class="btn btn-info btn-sm">
+                <input type="hidden" name='points' value="{{ data.actions[0].amount }}">
+            {% endfor %}
+
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

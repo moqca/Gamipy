@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="jumbotron">
+<h2>{{ game.gamename }}</h2>
+</div>
+
+
+<button class="btn" data-toggle="collapse" data-target="#metricform">Add New Metric</button>
+<div id="metricform" class="class-sm-6 collapse">
+  <h2>Add New Metric</h2>
+  <form class="form-horizontal" action="{{ url_for('metric_add') }}" method="post">
+       <div class="form-group">
+      <label class="col-sm-2 control-label">Metric Name</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="metricname" id="metricname" type="text" placeholder="Choose your Metric">
+      </div>
+        </div>
+       <div class="form-group">
+      <label for="fk_gamename" class="col-sm-2 control-label">gamename</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="fk_gamename" id="fk_gamename" type="text" value="{{ metricform.fk_gamename.data }}" readonly>
+          </input>
+      </div>
+        </div>
+
+        <div class="form-group">
+        <label for="fromdb" class="col-sm-2 control-label">From DB</label>
+        <div class="col-sm-10">
+         <select id="fromdb" class="form-control" name="fromdb">
+            <option>GPQ</option>
+          </select>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Type</label>
+        <div class="col-sm-10">
+          <select id="type" name="type" class="form-control">
+            <option>Points</option>
+          </select>
+        </div>
+        </div>
+    <input type=submit class="btn btn-primary btn-md" value="Publish">
+  </form>
+</div>
+
+
+{% endblock %}
